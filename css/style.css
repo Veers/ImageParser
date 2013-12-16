@@ -1,6 +1,17 @@
 #content {
-    position: absolute;
-    top: 50%;
-    height: 240px;
-    margin-top: -120px;
+    width: 200px;
+    padding: 0 50% 9 25%;
+    float: left;
+}
+#context {
+    width: 700px;
+    padding: 5px;
+    float: left;
+    position: relative;
+    top: 40px;
+    left: -70px;
+}
+input
+{
+     font-size:24px;
 }

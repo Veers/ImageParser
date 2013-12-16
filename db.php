@@ -8,47 +8,48 @@ class db
         'base' => 'tag',
     );
 
-    public static function putImages($src, $data)
+    public $connector;
+
+    function __construct()
     {
-        try {
-            $db = new PDO('mysql:host=localhost;dbname=tag', static::$config['user'], static::$config['pass']);
-            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $db->exec("set names utf8");
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-        $src = substr($src, 7, strlen($src));
-        echo $src;
-
-        try {
-            $stmt = $db->prepare("INSERT INTO a_sites (src) VALUES (?)");
-            $stmt -> execute(array($src));
-        }
-        catch(PDOException $e){
-            echo 'Error : '.$e->getMessage();
-            exit();
-        }
-
-        $cnt = $db->lastInsertId('src');
-
-        //$db->exec($query);
-
-        //var_dump($data);
-
-        try{
-            $stmt = $db->prepare("INSERT INTO a_images (image_link,image_size,site_id) VALUES (:link,:sizeimg,:s_id)");
-            foreach ($data as &$value)
-                $stmt -> execute(array('link'=>$value[0], 'sizeimg'=>settype($value[1], 'integer'), 's_id'=>$cnt));
-        } catch (PDOException $e) {
-            echo 'Error : '.$e->getMessage();
-            exit();
-        }
-
-
-        echo $src;
+        $this->connector = new PDO('mysql:host=localhost;dbname=tag', static::$config['user'], static::$config['pass']);;
+        $this->connector->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->connector->exec("set names utf8");
     }
 
-    public static function test()
+    public function putLinksToBase($links)
+    {
+        $site_address = $links[0];
+        $data = $links[1];
+        array_multisort($data);
+
+        $site_address = substr($site_address, 7, strlen($site_address));
+        try {
+            $statement =$this->connector->prepare("INSERT INTO a_sites (src) VALUES (?)");
+            $statement->execute(array($site_address));
+        } catch (PDOException $e) {
+            echo 'Error : ' . $e->getMessage();
+            exit();
+        }
+
+        $last_insert_id = $this->connector->lastInsertId('src');
+
+        try {
+            $statement = $this->connector->prepare("INSERT INTO a_images (image_link,image_size,site_id) VALUES (:link,:sizeimg,:s_id)");
+            foreach ($data as &$value){
+                foreach ($value as $key=>$val){
+                    $number = (int) $val;
+                    $statement->execute(array('link' => $key, 'sizeimg' => $number, 's_id' => $last_insert_id));
+                }
+            }
+        } catch (PDOException $e) {
+            echo 'Error : ' . $e->getMessage();
+            exit();
+        }
+
+    }
+
+    public function test()
     {
         return true;
     }
