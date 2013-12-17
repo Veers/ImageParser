@@ -3,8 +3,10 @@ require 'parser.php';
 require 'db.php';
 
 if (isset($_POST['data'])) {
+    $login = 'punk';
+    $pass = '11ctynz,hz';
     $parser = new Parser();
-    $db = new db();
+    $db = new db($login, $pass);
     $links = $parser->parseLinks($_POST['data']);
     $db->putLinksToBase($links);
     $inputData = $parser->printData($links);
