@@ -15,3 +15,6 @@ input
 {
      font-size:24px;
 }
+#preview {
+    visibility: hidden;
+}

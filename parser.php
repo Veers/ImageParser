@@ -5,7 +5,7 @@ class Parser
 {
     function __construct()
     {
-
+        //var_dump($_GET);
     }
 
     function parseLinks($links)

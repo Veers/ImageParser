@@ -2,13 +2,15 @@
 require 'parser.php';
 require 'db.php';
 
-if (isset($_POST['data'])) {
+//var_dump($_GET['data']);
+
+if (isset($_GET['data'])) {
     $login = 'punk';
     $pass = '11ctynz,hz';
     $parser = new Parser();
     $db = new db($login, $pass);
-    $links = $parser->parseLinks($_POST['data']);
-    $db->putLinksToBase($links);
+    $links = $parser->parseLinks($_GET['data']);
+    //$db->putLinksToBase($links);
     $inputData = $parser->printData($links);
 }
 ?>
@@ -20,10 +22,10 @@ if (isset($_POST['data'])) {
     </head>
     <body>
         <div id="content">
-            <form method="post" action="index.php"">
-                <input name="data" type="text" size="40">
+            <form id="myForm">
+                <input name="data" id="inputID" type="text" size="40">
             </form>
-            <div id="context">
+            <div id="context" class="links">
                 <?php
                 echo '<ul>';
                 if (isset($inputData)) {
@@ -35,6 +37,6 @@ if (isset($_POST['data'])) {
                 ?>
             </div>
         </div>
-
+        <img id="picture">
     </body>
 </html>
