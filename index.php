@@ -21,22 +21,26 @@ if (isset($_GET['data'])) {
         <script type="text/javascript" src="js/inputHandlerJS.js"></script>
     </head>
     <body>
-        <div id="content">
-            <form id="myForm">
-                <input name="data" id="inputID" type="text" size="40">
-            </form>
-            <div id="context" class="links">
-                <?php
-                echo '<ul>';
-                if (isset($inputData)) {
-                    for ($i = 1; $i < count($inputData); $i++) {
-                        echo '<li><a href=' . $inputData[$i] . '>' . $inputData[$i] . '</a></li>';
-                    }
-                }
-                echo '</ul>';
-                ?>
-            </div>
+    <div id="content">
+        <form id="myForm">
+            <input name="data" id="inputID" type="text" size="40">
+        </form>
+    </div>
+    <div id="context" class="links">
+        <?php
+        echo '<ul>';
+        if (isset($inputData)) {
+            for ($i = 1; $i < count($inputData); $i++) {
+                echo '<li><a href=' . $inputData[$i] . '>' . $inputData[$i] . '</a></li>';
+            }
+        }
+        echo '</ul>';
+        ?>
+    </div>
+
+        <div id="overlay"></div>
+        <div id="divblock">
+            <img id="picture">
         </div>
-        <img id="picture">
     </body>
 </html>

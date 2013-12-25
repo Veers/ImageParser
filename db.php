@@ -31,11 +31,13 @@ class db
         $statement->setFetchMode(PDO::FETCH_NUM);
         while($row = $statement->fetch())
         {
+            // check for database in schema
             $s = strcasecmp($row['0'], static::$config['base']);
             if ($s == 0) {
                 $return_value = 1;
             } else {
                 try {
+                    // else create database and tables
                     $createDatabaseAndTablesStatement = $this->connector->prepare
                     (
                         "CREATE DATABASE :dbName;
@@ -54,11 +56,13 @@ class db
 
     public function putLinksToBase($links)
     {
+        // links - array[address, array[data]]
         $site_address = $links[0];
         $data = $links[1];
         array_multisort($data);
         $site_address = substr($site_address, 7, strlen($site_address));
         try {
+            // insert url into db
             $statement =$this->connector->prepare("INSERT INTO a_sites (src) VALUES (?)");
             $statement->execute(array($site_address));
         } catch (PDOException $e) {
@@ -67,6 +71,7 @@ class db
         }
         $last_insert_id = $this->connector->lastInsertId('src');
         try {
+            // insert images into db
             $statement = $this->connector->prepare("INSERT INTO a_images (image_link,image_size,site_id) VALUES (:link,:sizeimg,:s_id)");
             foreach ($data as &$value){
                 foreach ($value as $link_image=>$sizeoofimage){

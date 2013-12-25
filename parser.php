@@ -25,6 +25,7 @@ class Parser
                 array_push($input_array_links_sizes, array($element->href => Parser::getRemoteFileSize($element->href)));
             }
         }
+        // links - array[address, array[data]]
         return array($address, $input_array_links_sizes);
     }
 

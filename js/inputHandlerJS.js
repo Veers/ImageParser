@@ -1,7 +1,7 @@
 $(document).ready(function () {
     var txtVal;
     $('#inputID').keypress(function() {
-        txtVal = this.value;
+        txtVal = $(this).val();
     });
 
     function validateURL(param){
@@ -16,7 +16,7 @@ $(document).ready(function () {
         {
             return true;
         } else {
-            alert("Error");
+            alert(txtVal+" не является ссылкой");
             return false;
         }
     }
@@ -28,19 +28,39 @@ $(document).ready(function () {
         }
     });
 
-    $(".links a").click(function(){
+    $(".links a").click(function(e){
         var largePath = $(this).attr("href");
         var largeAlt = $(this).attr("title");
-        $('#picture').attr({ src: largePath, alt: largeAlt });
-        $('#picture').html(" (" + largeAlt + ") ");
-        $('#picture').css("position", "absolute");
-        $('#picture').css("left", "50%");
-        //$('#picture').height()
-        $('#picture').css("margin-left", "-470px");
-        $('#picture').show();
-        return false;
+        var $picture = $('#picture');
+        $picture.attr({ src: largePath, alt: largeAlt });
+        $picture.html(" (" + largeAlt + ") ");
+        $picture.css("visibility", "visible");
+//        $('#picture').show();
+        var $img = $('img');
+        $img.load(function(){
+            $(this).removeAttr("width").removeAttr("height").css({ width: "", height: "" });
+            var width  = $(this).width();
+            var height = $(this).height();
+            $("#divblock").css("width", width+10);
+            $("#divblock").css("height", height+10);
+        });
+        var overlay = $("#overlay");
+        var w = document.body.scrollWidth + 'px';
+        var h = document.body.scrollHeight + 'px';
+        overlay.css('width', w);
+        overlay.css('height', h);
+        overlay.css('display','block');
+        // $("#divblock").css('top','400');
+        var top_coords = $(window).scrollTop();
+        var coords = top_coords + (($(window).height()/2) - $('divblock').height());
+        //alert($(window).height());//387
+        $("#divblock").css({margin: coords+'px 0px 0px -300px', 'top': '0'});
+        $("#divblock").css('display','block');
+        e.preventDefault();
     });
+
     $('#picture').click(function(){
-        $('#picture').hide();
+        $("#overlay").css('display','none');
+        $("#divblock").css('display','none');
     });
 });
